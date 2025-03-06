@@ -33,6 +33,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         Category::create($request->all());
+        // Category::create($request->validated());
         return redirect()->to('category');
     }
 

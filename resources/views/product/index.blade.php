@@ -1,4 +1,4 @@
-@extends('welcome')
+@extends('layouts.app')
 @section('content')
     <div class="mx-48 pt-5"><a href={{ route('product.create') }}
             class="bg-gray-600 text-gray-200 mx-2 my-4 px-3 py-2 hover:bg-slate-500 rounded-xl">Add
@@ -37,7 +37,7 @@
                             {{ $product->color }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $product->category }}
+                          <p>{{ $product->categories->pluck('name')->implode(', ') }}</p>
                         </td>
                         <td class="px-6 py-4">
                             {{ $product->price }}

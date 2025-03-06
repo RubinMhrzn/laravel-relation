@@ -1,4 +1,4 @@
-@extends('welcome')
+@extends('layouts.app')
 @section('content')
     <div class=" mx-[20rem] my-5 bg-gray-500 flex justify-center py-10">
         <form action="/category" method="post">

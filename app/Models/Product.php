@@ -9,12 +9,11 @@ class Product extends Model
     // protected $fillable = [
     //     'name',
     //     'color',
-    //     'category',
     //     'price'
     // ];
     protected $guarded = ['id'];
-    public function Category()
+    public function categories()
     {
-        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
 }

@@ -24,4 +24,3 @@ Route::get('/category', [CategoryController::class, 'index'])->name('category');
 Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
 Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
 Route::get('/category{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
-

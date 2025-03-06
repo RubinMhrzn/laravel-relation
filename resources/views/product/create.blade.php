@@ -1,4 +1,4 @@
-@extends('welcome')
+@extends('layouts.app')
 @section('content')
     <div class="mx-40 my-5">
 
@@ -22,7 +22,7 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="mb-5">
+            {{-- <div class="mb-5">
                 <label for="category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
                 <input type="text" name="category"
                     class="bg-gray-50 border border-gray-300 text-gray-900  block w-full p-2.5 dark:bg-gray-300 dark:border-gray-600 rounded-xl"
@@ -31,7 +31,7 @@
                 @error('category')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
-            </div>
+            </div> --}}
             <div class="mb-5">
                 <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Price</label>
                 <input type="number" name="price"
@@ -41,15 +41,18 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <label for="category_id"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">category_id</label>
-            <select id="countries" name="category_id"
-                class="bbg-gray-50 border border-gray-300 text-gray-900  block w-full p-2.5 dark:bg-gray-300 dark:border-gray-600 rounded-xl">
-                <option value="" disabled selected>Select a category</option>
+            <label for="category_ids"
+                class="block mb-2 text-sm font-medium text-gray-900">category_id</label>
+                    <select id="categories" name="category_ids[]" multiple
+            class="bg-gray-50 border border-gray-300 text-gray-900 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-600 rounded-xl">
                 @foreach ($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    <option value="{{ $category->id }}" 
+                        {{ in_array($category->id, old('category_ids', $selectedCategories ?? [])) ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
                 @endforeach
             </select>
+
             <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 mt-8 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
         </form>

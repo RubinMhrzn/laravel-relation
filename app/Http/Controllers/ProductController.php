@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('categories')->get();
         return view('product.index', compact('products'));
     }
 
@@ -36,12 +36,17 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'color' => $request->color,
-            'category' => $request->category,
             'price' => $request->price
         ]);
+
+        $categoryIds = $request->category_ids;
+
+        if ($product && $categoryIds) {
+            $product->categories()->sync($categoryIds);
+        }
 
         return redirect()->to('product');
     }
@@ -60,8 +65,10 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::where('id', $id)->first();
-        return view('product.edit', compact('product'));
+        $product            = Product::where('id', $id)->first();
+        $selectedCategories = $product->categories->pluck('id')->toArray();
+
+        return view('product.edit', compact('product', 'selectedCategories'));
     }
 
     /**

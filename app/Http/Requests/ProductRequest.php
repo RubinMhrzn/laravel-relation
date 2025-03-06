@@ -30,22 +30,21 @@ class ProductRequest extends FormRequest
     {
         if ($this->isMethod('POST')) {
             return [
-                'name' => 'required|min:6|string',
-                'color' => 'required|string',
-                'category' => 'required|string',
-                'price' => 'required|numeric'
+                'name'         => 'required|min:6|string',
+                'color'        => 'required|string',
+                'category_ids' => 'required|array',
+                'price'        => 'required|numeric'
             ];
         }
 
         if ($this->isMethod('PUT') || $this->isMethod('PATCh')) {
             return [
-                'name' => 'sometimes|required|min:6|string',
-                'color' => 'sometimes|required|string',
-                'category' => 'sometimes|required|string',
-                'price' => 'sometimes|required|numeric'
+                'name'         => 'sometimes|required|min:6|string',
+                'color'        => 'sometimes|required|string',
+                'category_ids' => 'sometimes|required|array',
+                'price'        => 'sometimes|required|numeric'
             ];
         }
-
     }
 
     public function messages()
