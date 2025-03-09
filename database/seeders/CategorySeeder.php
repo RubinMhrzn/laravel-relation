@@ -15,16 +15,20 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Cat A'
+                'name' => 'Cat A',
+                'slug' => 'cat-a'
             ],
             [
-                'name' => 'Cat B'
+                'name' => 'Cat B',
+                'slug' => 'cat-b'
             ],
             [
-                'name' => 'Cat C'
+                'name' => 'Cat C',
+                'slug' => 'cat-c'
             ],
             [
-                'name' => 'Cat D'
+                'name' => 'Cat D',
+                'slug' => 'cat-d'
             ],
         ];
 

@@ -22,16 +22,7 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-            {{-- <div class="mb-5">
-                <label for="category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
-                <input type="text" name="category"
-                    class="bg-gray-50 border border-gray-300 text-gray-900  block w-full p-2.5 dark:bg-gray-300 dark:border-gray-600 rounded-xl"
-                    placeholder="category" />
 
-                @error('category')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div> --}}
             <div class="mb-5">
                 <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Price</label>
                 <input type="number" name="price"
@@ -41,12 +32,11 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <label for="category_ids"
-                class="block mb-2 text-sm font-medium text-gray-900">category_id</label>
-                    <select id="categories" name="category_ids[]" multiple
-            class="bg-gray-50 border border-gray-300 text-gray-900 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-600 rounded-xl">
+            <label for="category_ids" class="block mb-2 text-sm font-medium text-gray-900">category_id</label>
+            <select id="categories" name="category_ids[]" multiple
+                class="bg-gray-50 border border-gray-300 text-gray-900 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-600 rounded-xl">
                 @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" 
+                    <option value="{{ $category->id }}"
                         {{ in_array($category->id, old('category_ids', $selectedCategories ?? [])) ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>

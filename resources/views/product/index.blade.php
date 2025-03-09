@@ -37,16 +37,17 @@
                             {{ $product->color }}
                         </td>
                         <td class="px-6 py-4">
-                          <p>{{ $product->categories->pluck('name')->implode(', ') }}</p>
+
+                            <p>{{ $product->categories->pluck('name')->implode(', ') }}</p>
                         </td>
                         <td class="px-6 py-4">
                             {{ $product->price }}
                         </td>
                         <td class="flex flex-row gap-1 justify-start py-3">
-                            <a href={{ route('product.edit', $product->id) }}>edit</a>
-                            <a href="/product/{{ $product->id }}">show</a>
+                            <a href={{ route('product.edit', $product->slug) }}>edit</a>
+                            <a href="/product/{{ $product->slug }}">show</a>
                             <div>|</div>
-                            <form class="" action="/product/{{ $product->id }}" method="post">@csrf
+                            <form class="" action="/product/{{ $product->slug }}" method="post">@csrf
                                 @method('delete')
                                 <button type="submit">Delete</button>
                             </form>

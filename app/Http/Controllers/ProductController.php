@@ -54,40 +54,56 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($slug)
     {
-        $product = Product::find($id)->first();
+        $product = Product::where('slug', $slug)->first();
         return view('product.show', compact('product'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($slug)
     {
-        $product            = Product::where('id', $id)->first();
+        $product = Product::whereSlug($slug)->first();
+
+        $categories = Category::all();
+
         $selectedCategories = $product->categories->pluck('id')->toArray();
 
-        return view('product.edit', compact('product', 'selectedCategories'));
+        return view('product.edit', compact('product', 'selectedCategories', 'categories'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductRequest $request, $id)
+    public function update(ProductRequest $request, $slug)
     {
-        $products = Product::where('id', $id)->first();
-        $products->update($request->all());
+        $product = Product::findOrFail($slug);
+
+        $product->update([
+            'name' => $request->name,
+            'color' => $request->color,
+            'price' => $request->price,
+        ]);
+
+        $product->categories()->sync($request->category_ids);
+
         return redirect()->to('product');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $slug)
     {
-        $products = Product::where('id', $id)->first();
-        $products->delete($request->all());
+        $product = Product::whereSlug($slug)->first();
+
+        $product->categories()->detach();
+
+        $product->delete();
+
         return redirect()->to('product');
     }
 }
