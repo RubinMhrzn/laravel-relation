@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Writer;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class WriterSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class WriterSeeder extends Seeder
         Writer::create([
             'name' => 'Writer',
             'email' => 'writer@gmail.com',
-            'password' => bcrypt('password'),
+            'password' => Hash::make('your-password')
         ]);
     }
 }

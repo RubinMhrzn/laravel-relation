@@ -72,18 +72,13 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
         'admins' => [
             'driver' => 'eloquent',
-            'table' => App\Models\Admin::class,
+            'model' => App\Models\Admin::class,
         ],
         'writers' => [
             'driver' => 'eloquent',
-            'table' => App\Models\Writer::class,
+            'model' => App\Models\Writer::class,
         ],
     ],
 

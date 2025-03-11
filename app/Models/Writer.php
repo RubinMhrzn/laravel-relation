@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Writer extends Authenticatable
 {
-    protected $guard = 'writer';
+    // protected $guard = 'writer';
 
     protected $guarded = ['id'];
 

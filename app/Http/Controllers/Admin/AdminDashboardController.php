@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Admin;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminController extends Controller
+class AdminDashboardController extends Controller
 {
     public function showAdminLoginForm()
     {
@@ -18,6 +18,8 @@ class AdminController extends Controller
         if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password, false])) {
             return redirect()->to('admin.dashboard');
         }
+
+        return back()->withInput($request->only('username'));
     }
 
     public function adminDashboard()
