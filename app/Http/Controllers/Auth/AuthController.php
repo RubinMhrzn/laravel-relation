@@ -15,7 +15,7 @@ class AuthController extends Controller
 
     public function writerLogin(Request $request)
     {
-        if (Auth::guard('writer')->attempt(['email' => $request->email, 'password' => $request->password, $request->get('remember')])) {
+        if (Auth::guard('writer')->attempt(['email' => $request->email, 'password' => $request->password, true])) {
             return redirect()->to('writer.dashboard');
         }
     }

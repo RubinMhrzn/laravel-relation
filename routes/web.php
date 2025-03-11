@@ -36,6 +36,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
 Route::group(['as' => 'writer.'], function () {
     Route::get('/login', [AuthController::class, 'showWriterLoginForm'])->name('login');
-    Route::post('/login', [AdminController::class, 'writerLogin']);
-    Route::get('/dashboard', [DashboardController::class, 'writerDashboard'])->name('dashboard')->middleware(['auth:writer']);
+    Route::post('/login', [AuthController::class, 'writerLogin']);
+    Route::get('/dashboard', [DashboardController::class, 'writerDashboard'])->name('dashboard');//->middleware(['auth:writer']);
 });
