@@ -52,13 +52,12 @@ class AuthController extends Controller
 
         if (Auth::guard('writer')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
-
-            return redirect()->route('writer.dashboard.home');
+            return redirect()->route('writer.dashboard');
         }
 
         return back()->withErrors([
             'identity' => 'The provided credentials do not match our records.',
-        ])->onlyInput('identity');
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request)
