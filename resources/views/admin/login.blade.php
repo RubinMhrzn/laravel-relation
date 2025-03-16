@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                             <a href="#"
-                                class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot
+                                class="text-sm text-white font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot
                                 password?</a>
                         </div>
                         <button type="submit"
