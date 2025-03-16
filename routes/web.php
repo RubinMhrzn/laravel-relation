@@ -36,5 +36,5 @@ Route::get('/category{id}/edit', [CategoryController::class, 'edit'])->name('cat
 Route::group(['as' => 'writer.'], function () {
     Route::get('/login', [AuthController::class, 'showLoginPage'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
-    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth:writer')->name('dashboard.home');
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth:writer')->name('dashboard');
 });
