@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -27,14 +28,17 @@ Route::get('/category/create', [CategoryController::class, 'create'])->name('cat
 Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
 Route::get('/category{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
 
-// Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-//     Route::get('/login', [AdminController::class, 'showAdminLoginForm'])->name('login');
-//     Route::post('/login', [AdminController::class, 'adminLogin']);
-//     Route::get('/dashboard', [AdminController::class, 'adminDashboard'])->name('dashboard')->middleware(['auth:admin']);
-// });
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('/login', [AdminDashboardController::class, 'showAdminLoginForm'])->name('login');
+    Route::post('/login', [AdminDashboardController::class, 'adminLogin'])->name('login.store');
+    Route::get('/dashboard', [AdminDashboardController::class, 'adminDashboard'])->middleware('auth:admin')->name('dashboard');
+    Route::post('/logout', [AdminDashboardController::class, 'logout'])->name('logout');
+
+});
 
 Route::group(['as' => 'writer.'], function () {
     Route::get('/login', [AuthController::class, 'showLoginPage'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth:writer')->name('dashboard');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

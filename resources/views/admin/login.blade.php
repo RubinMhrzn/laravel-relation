@@ -22,7 +22,7 @@
                         class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Sign in
                     </h1>
-                    <form class="space-y-4 md:space-y-6" action="{{ $url }}" method="post">
+                    <form class="space-y-4 md:space-y-6" action="{{ route(name: 'admin.login.store') }}" method="post">
                         @csrf
                         @method('POST')
                         <div>

@@ -24,7 +24,8 @@
                         class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Sign in
                     </h1>
-                    <form class="space-y-4 md:space-y-6" action="{{ route('writer.login.store') }}" method="POST">
+                    <form class="space-y-4 md:space-y-6" action="{{ route(name: 'writer.login.store') }}"
+                        method="POST">
                         @csrf
                         <div>
                             <label for="email"

@@ -28,8 +28,8 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $user = Writer::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => Hash::make('password'),
             'is_editor' => $request->is_editor ?? 0
         ]);

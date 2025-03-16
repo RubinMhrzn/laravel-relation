@@ -15,3 +15,8 @@
         </tr>
     </table>
 @endif
+<form action="{{ route('writer.logout') }}" method="post">
+    @csrf
+    @method('post')
+    <button value="submit">logout</button>
+</form>
