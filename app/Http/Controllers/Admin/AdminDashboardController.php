@@ -34,6 +34,9 @@ class AdminDashboardController extends Controller
 
     public function adminDashboard()
     {
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login');
+        }
         return view('admin.dashboard');
     }
     public function logout(Request $request)

@@ -10,6 +10,9 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
+        if (!Auth::guard('writer')->check()) {
+            return redirect()->route('writer.login');
+        }
         return view('writer.dashboard');
     }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -42,3 +43,7 @@ Route::group(['as' => 'writer.'], function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth:writer')->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+Route::get('/media', [MediaController::class, 'create'])->name('media');
+Route::post('/media', [MediaController::class, 'store'])->name('media.store');
+Route::delete('/media/{id}', [MediaController::class, 'destroy'])->name('media.destroy');
