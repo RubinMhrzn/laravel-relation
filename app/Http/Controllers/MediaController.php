@@ -15,6 +15,11 @@ class MediaController extends Controller
     public function index()
     {
 
+        // Get all media records to pass to the view
+        $medias = Media::all();
+
+        // Return the view and pass all media records
+        return view('mediaindex', compact('medias'));
     }
 
     /**
@@ -43,12 +48,7 @@ class MediaController extends Controller
             'path' => $media['path'],
             'extension' => $media['extension']
         ]);
-
-        // Get all media records to pass to the view
-        $medias = Media::all();
-
-        // Return the view and pass all media records
-        return view('media', compact('medias'));
+        return redirect()->route('media');
     }
 
     /**

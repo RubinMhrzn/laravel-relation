@@ -45,5 +45,6 @@ Route::group(['as' => 'writer.'], function () {
 });
 
 Route::get('/media', [MediaController::class, 'create'])->name('media');
+Route::get('/media/view', [MediaController::class, 'index'])->name('media.index');
 Route::post('/media', [MediaController::class, 'store'])->name('media.store');
 Route::delete('/media/{id}', [MediaController::class, 'destroy'])->name('media.destroy');
