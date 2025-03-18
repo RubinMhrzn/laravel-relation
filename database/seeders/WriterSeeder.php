@@ -17,7 +17,7 @@ class WriterSeeder extends Seeder
         Writer::create([
             'name' => 'Writer',
             'email' => 'writer@gmail.com',
-            'password' => Hash::make('your-password')
+            'password' => password_hash('password', PASSWORD_BCRYPT)
         ]);
     }
 }

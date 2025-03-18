@@ -11,9 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-            'auth' => \App\Http\Middleware\RedirectIfUnauthorized::class
-        ]);
+        // $middleware->alias([
+        //     'auth' => \App\Http\Middleware\RedirectIfUnauthorized::class
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

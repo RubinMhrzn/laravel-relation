@@ -9,26 +9,17 @@ use Illuminate\Http\Request;
 class MediaController extends Controller
 {
     use MediaTrait;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
         // Get all media records to pass to the view
         $medias = Media::all();
 
         // Return the view and pass all media records
         return view('mediaindex', compact('medias'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $medias = Media::all();
-        return view('media', compact('medias'));
     }
 
     /**
@@ -40,15 +31,9 @@ class MediaController extends Controller
             return back()->withErrors(['file' => 'No file uploaded.']);
         }
 
-        $media = $this->storeMedia($request->file('file'));
+        $media = $this->uploadFile($request->file('file'), 'profile');
 
-        Media::create([
-            'name' => $media['name'],
-            'mimetype' => $media['mimetype'],
-            'path' => $media['path'],
-            'extension' => $media['extension']
-        ]);
-        return redirect()->route('media');
+        return redirect()->route('media.index');
     }
 
     /**
@@ -81,6 +66,8 @@ class MediaController extends Controller
     public function destroy($id)
     {
         $media = Media::find($id);
+        $this->deleteFile($media->path);
+
         $media->delete();
 
         return back();

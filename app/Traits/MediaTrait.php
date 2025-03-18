@@ -1,24 +1,57 @@
 <?php
+
 namespace App\Traits;
 
-use Illuminate\Support\Str;
+use App\Models\Media;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 trait MediaTrait
 {
-    public function storeMedia($file)
+    /**
+     * Upload and store a file
+     *
+     * @param UploadedFile $file
+     * @param string $directory
+     * @return string|false
+     */
+    public function uploadFile(UploadedFile $file, $referenceId = null,  string $directory = 'uploads'): string|false
     {
-        $media = [];
-        $media['name'] = $file->getClientOriginalName();
-        $media['mimetype'] = $file->getClientMimeType();
-        $media['extension'] = $file->getClientOriginalExtension();
+        // Generate unique filename
+        $filename = time() . '_' . md5($file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
 
-        // Generate a random file name
-        $fileName = Str::random(20) . '.' . $media['extension'];
+        // Store the file in the given directory
+        $directory = $file->storeAs($directory, $filename, 'public');
+        $path     = 'storage/' . $directory;
 
-        // Store the file
-        $path = $file->storeAs('public/media', $fileName);
+        $mediaUploadData = [
+            'name' => $filename,
+            // 'person_id' => $referenceId,
+            'path'      => $path,
+            'mimetype'      => $file->getClientMimeType(),
+            // 'size'      => $file->getSize(),
+            'extension' => $file->getClientOriginalExtension()
+        ];
 
-        $media['path'] = $path;
+        $media = $this->appendToMediaUpload($mediaUploadData);
 
-        return $media;
+        return $media->path;
+        // return $path ? $path : false;
+    }
+
+    /**
+     * Delete a stored file
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function deleteFile(string $path): bool
+    {
+        return Storage::disk('public')->exists($path) ? Storage::disk('public')->delete($path) : false;
+    }
+
+    public function appendToMediaUpload($data)
+    {
+        return Media::create($data);
     }
 }

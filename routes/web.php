@@ -34,7 +34,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::post('/login', [AdminDashboardController::class, 'adminLogin'])->name('login.store');
     Route::get('/dashboard', [AdminDashboardController::class, 'adminDashboard'])->middleware('auth:admin')->name('dashboard');
     Route::post('/logout', [AdminDashboardController::class, 'logout'])->name('logout');
-
 });
 
 Route::group(['as' => 'writer.'], function () {
@@ -44,7 +43,6 @@ Route::group(['as' => 'writer.'], function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::get('/media', [MediaController::class, 'create'])->name('media');
-Route::get('/media/view', [MediaController::class, 'index'])->name('media.index');
+Route::get('/media', [MediaController::class, 'index'])->name('media.index');
 Route::post('/media', [MediaController::class, 'store'])->name('media.store');
 Route::delete('/media/{id}', [MediaController::class, 'destroy'])->name('media.destroy');

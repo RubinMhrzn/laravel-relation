@@ -1,0 +1,2 @@
+Never get directly from env, instead define on config/app.php and get as:
+- config('app.name')
