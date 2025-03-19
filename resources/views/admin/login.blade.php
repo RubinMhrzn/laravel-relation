@@ -49,7 +49,7 @@
                                     <label for="remember" class="text-gray-500 dark:text-gray-300">Remember me</label>
                                 </div>
                             </div>
-                            <a href="#"
+                            <a href={{ route('forget-password') }}
                                 class="text-sm text-white font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot
                                 password?</a>
                         </div>

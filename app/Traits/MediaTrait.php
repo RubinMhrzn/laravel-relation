@@ -15,20 +15,20 @@ trait MediaTrait
      * @param string $directory
      * @return string|false
      */
-    public function uploadFile(UploadedFile $file, $referenceId = null,  string $directory = 'uploads'): string|false
+    public function uploadFile(UploadedFile $file, $referenceId = null, string $directory = 'uploads'): string|false
     {
         // Generate unique filename
         $filename = time() . '_' . md5($file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
 
         // Store the file in the given directory
         $directory = $file->storeAs($directory, $filename, 'public');
-        $path     = 'storage/' . $directory;
+        $path = 'storage/' . $directory;
 
         $mediaUploadData = [
             'name' => $filename,
             // 'person_id' => $referenceId,
-            'path'      => $path,
-            'mimetype'      => $file->getClientMimeType(),
+            'path' => $path,
+            'mimetype' => $file->getClientMimeType(),
             // 'size'      => $file->getSize(),
             'extension' => $file->getClientOriginalExtension()
         ];

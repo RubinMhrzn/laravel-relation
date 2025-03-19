@@ -15,11 +15,7 @@
     <div class="relative overflow-x-auto px-48 pt-20">
         <div class="py-8">
 
-            <div class="max-w-sm mx-auto py-28">
-
-                <a href={{ route('media.index') }}
-                    class="text-white bg-cyan-600 rounded-2xl px-5 py-2.5 text-center">show
-                    data</a>
+            <div class="max-w-sm mx-auto ">
                 <form action="/media" class="max-w-sm mx-auto py-10" enctype="multipart/form-data" method="post">
                     @csrf
                     @method('post')

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PasswordResetMail;
+use App\Models\PasswordResetToken;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,14 +13,57 @@ use App\Models\{
     Writer
 };
 
+use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Mail;
 
 class AuthController extends Controller
 {
     public function showRegisterPage()
     {
         return view('writer.register');
+    }
+
+    public function forgetPassword()
+    {
+        return view('writer.forget-password');
+    }
+
+    public function setPassword()
+    {
+        return view('writer.set-password');
+    }
+
+    public function storeSetPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|confirmed|min:6',
+        ]);
+
+        $email = PasswordResetToken::where('token', $request->token)->first()->email;
+        dd($email);
+
+        User::where('email', $email)->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->to(route('writer.login'));
+    }
+
+    public function sendPasswordResetToken(Request $request)
+    {
+        $email = $request->email;
+        $token = Str::random(60);
+
+        PasswordResetToken::create([
+            'email' => $email,
+            'token' => $token,
+        ]);
+
+        Mail::to($email)->send(new PasswordResetMail($token));
+
+        return redirect()->back()->with('message', 'Password reset link has been sent to your email.');
     }
 
     public function showLoginPage()
@@ -28,7 +74,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $user = Writer::create([
-            'name' => $request->name,
+            'name' => $name,
             'email' => $request->email,
             'password' => Hash::make('password'),
             'is_editor' => $request->is_editor ?? 0
