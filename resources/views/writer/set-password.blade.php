@@ -12,17 +12,19 @@
 
 <body>
     <div class="max-w-sm mx-auto ">
-        <form action={{ route('set-password') }} class="max-w-sm mx-auto py-10" method="post">
+        <form action="{{ route('set-password') }}" class="max-w-sm mx-auto py-10" method="POST">
             @csrf
-            @method('post')
+            @method('POST')
 
             <div class="mb-5">
-                <label for="email" class="block mb-2 text-lg font-medium text-gray-900 ">New Password</label>
-                <input type="password" id="email" name="password"
+                <input type="hidden" name="token" value="{{ $token }}">
+
+                <label for="password" class="block mb-2 text-lg font-medium text-gray-900 ">New Password</label>
+                <input type="password" id="password" name="password"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
-                <label for="email" class="block mb-2 text-lg font-medium text-gray-900 ">Confirm Password</label>
-                <input type="password" id="email" name="confirm_password"
+                <label for="password" class="block mb-2 text-lg font-medium text-gray-900 ">Confirm Password</label>
+                <input type="password" id="password" name="password_confirmation"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
             </div>
             <button type="submit"

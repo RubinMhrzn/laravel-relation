@@ -50,4 +50,4 @@ Route::delete('/media/{id}', [MediaController::class, 'destroy'])->name('media.d
 Route::get('/forget-password', [AuthController::class, 'forgetPassword'])->name('forget-password');
 Route::post('/send-password', [AuthController::class, 'sendPasswordResetToken'])->name('send-password');
 Route::get('/set-password', [AuthController::class, 'setPassword'])->name('set-password');
-Route::post('/set-password', [AuthController::class, 'storeSetPassword'])->name('set-password');
+Route::post('/set-password', [AuthController::class, 'resetPassword']);

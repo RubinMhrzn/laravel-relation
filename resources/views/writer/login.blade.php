@@ -7,10 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     @vite('resources/css/app.css')
-
 </head>
 
 <body>
+    @if (session('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+    @endif
+
     @if ($errors->has('identity'))
         <p class="text-red-500">{{ $errors->first('identity') }}</p>
     @endif

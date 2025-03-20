@@ -16,7 +16,7 @@ use App\Models\{
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -30,36 +30,53 @@ class AuthController extends Controller
         return view('writer.forget-password');
     }
 
-    public function setPassword()
+    public function setPassword(Request $request)
     {
-        return view('writer.set-password');
+        $token = $request->query('token');
+
+        return view('writer.set-password', compact('token'));
     }
 
-    public function storeSetPassword(Request $request)
+    public function resetPassword(Request $request)
     {
         $request->validate([
-            'password' => 'required|confirmed|min:6',
+            'password' => 'required|confirmed|min:8',
+            'token' => 'required',
         ]);
 
-        $email = PasswordResetToken::where('token', $request->token)->first()->email;
-        dd($email);
+        $tokenEmail = PasswordResetToken::where('token', $request->token)->value('email');
 
-        User::where('email', $email)->update([
-            'password' => Hash::make($request->password),
-        ]);
+        if (!$tokenEmail) {
+            return redirect()->route('login')->with('error', 'Invalid or expired token.');
+        }
 
-        return redirect()->to(route('writer.login'));
+        $writer = Writer::whereEmail($tokenEmail)->first();
+
+        $writer->password = Hash::make($request->password);
+        $writer->save();
+
+        return redirect()->to(route('writer.login'))->with('message', 'Password successfully reset.');
     }
 
     public function sendPasswordResetToken(Request $request)
     {
         $email = $request->email;
-        $token = Str::random(60);
 
-        PasswordResetToken::create([
-            'email' => $email,
-            'token' => $token,
-        ]);
+        $existsWriter = Writer::whereEmail($email)->exists();
+        if (!$existsWriter) {
+            return redirect()->back()->with('error', 'Email not found.');
+        }
+
+        $token = PasswordResetToken::whereEmail($email)->value('token');
+
+        if (!$token) {
+            $token = Str::random(60);
+
+            PasswordResetToken::create([
+                'email' => $email,
+                'token' => $token,
+            ]);
+        }
 
         Mail::to($email)->send(new PasswordResetMail($token));
 
