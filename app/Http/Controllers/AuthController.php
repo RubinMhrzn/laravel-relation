@@ -40,7 +40,7 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         $request->validate([
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|min:8|confirmed',
             'token' => 'required',
         ]);
 
@@ -52,10 +52,15 @@ class AuthController extends Controller
 
         $writer = Writer::whereEmail($tokenEmail)->first();
 
+        if (!$writer) {
+            return redirect()->route('login')->with('error', 'User not found.');
+        }
+
         $writer->password = Hash::make($request->password);
         $writer->save();
 
-        return redirect()->to(route('writer.login'))->with('message', 'Password successfully reset.');
+        PasswordResetToken::where('token', $request->token)->delete();
+        return redirect()->route('writer.login')->with('message', 'Password successfully reset. Please log in.');
     }
 
     public function sendPasswordResetToken(Request $request)
