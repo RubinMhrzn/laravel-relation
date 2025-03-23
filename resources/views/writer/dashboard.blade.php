@@ -1,4 +1,5 @@
 @if (auth('writer')->check())
+    <a href={{ route('changepassword') }}>Change password</a>
     <h2>Writer Dashboard</h2>
     <table class="table-auto border-collapse border border-gray-400">
         <tr>

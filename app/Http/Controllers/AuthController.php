@@ -137,4 +137,33 @@ class AuthController extends Controller
 
         return redirect()->route('writer.login');
     }
+
+    public function changePassword()
+    {
+        return view('writer.changepassword');
+    }
+
+    public function replacepassword(Request $request)
+    {
+        // @dd($request->all());
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:8',
+        ]);
+
+        $writer = Auth::guard('writer')->user();
+
+        if (!Hash::check($request->old_password, $writer->password)) {
+            return redirect()->back()->with('error', 'Old password is incorrect.');
+        }
+        if ($request->new_password != $request->confirm_password) {
+            return redirect()->back()->with('error', 'new password and confirm doesnot match.');
+        }
+
+        $writer->password = Hash::make($request->new_password);
+        $writer->save();
+
+        return redirect()->to(route('writer.dashboard'))->with('message', 'Password successfully changed.');
+    }
+
 }

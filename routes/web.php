@@ -47,7 +47,13 @@ Route::get('/media', [MediaController::class, 'index'])->name('media.index');
 Route::post('/media', [MediaController::class, 'store'])->name('media.store');
 Route::delete('/media/{id}', [MediaController::class, 'destroy'])->name('media.destroy');
 
+//forget password
 Route::get('/forget-password', [AuthController::class, 'forgetPassword'])->name('forget-password');
 Route::post('/send-password', [AuthController::class, 'sendPasswordResetToken'])->name('send-password');
 Route::get('/set-password', [AuthController::class, 'setPassword'])->name('set-password');
 Route::post('/set-password', [AuthController::class, 'resetPassword']);
+
+
+//change password
+Route::get('/changepassword', [AuthController::class, 'changePassword'])->middleware('auth:writer')->name('changepassword');
+Route::post('/replacepassword', [AuthController::class, 'replacepassword'])->middleware('auth:writer')->name('replacepassword');
