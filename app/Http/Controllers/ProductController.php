@@ -106,4 +106,45 @@ class ProductController extends Controller
 
         return redirect()->to('product');
     }
+    public function productlist(Request $request)
+    {
+        $filters = $request->filters ?? [];
+
+        $sortDir = $request->filters->sort_dir ?? 'asc';
+        $categories = Category::whereHas('products')->get();
+
+        $query = Product::with('categories');
+
+        if ($filters['search'] && $filters['category']) {
+            $query->filter($filters);
+        }
+
+        if (isset($filters['sort'])) {
+            if ($filters['sort'] == 'name') {
+                $sortBy = 'name';
+                $sortDir = 'asc';
+            }
+
+            if ($filters['sort'] == 'lowest') {
+                $sortBy = 'price';
+                $sortDir = 'asc';
+            }
+
+            if ($filters['sort'] == 'highest') {
+                $sortBy = 'price';
+                $sortDir = 'desc';
+            }
+
+            if ($filters['sort'] == 'recent') {
+                $sortBy = 'created_at';
+                $sortDir = 'asc';
+            }
+
+            $query->orderBy($sortBy, $sortDir);
+        }
+
+        $products = $query->paginate(10);
+
+        return view('product.filterproduct', compact('products', 'categories'));
+    }
 }

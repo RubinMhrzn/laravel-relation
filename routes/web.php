@@ -57,3 +57,8 @@ Route::post('/set-password', [AuthController::class, 'resetPassword']);
 //change password
 Route::get('/changepassword', [AuthController::class, 'changePassword'])->middleware('auth:writer')->name('changepassword');
 Route::post('/replacepassword', [AuthController::class, 'replacepassword'])->middleware('auth:writer')->name('replacepassword');
+
+// Route::get('/displayproduct', [ProductController::class, 'displayproduct'])->name('displayproduct');
+
+Route::get('/product-list', [ProductController::class, 'productlist'])->name('productlist');
+
