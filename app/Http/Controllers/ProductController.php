@@ -110,32 +110,27 @@ class ProductController extends Controller
     {
         $filters = $request->filters ?? [];
 
-        $sortDir = $request->filters->sort_dir ?? 'asc';
+        $sortDir = $filters['sort_dir'] ?? 'asc';
         $categories = Category::whereHas('products')->get();
 
         $query = Product::with('categories');
 
-        if ($filters['search'] && $filters['category']) {
+        // Ensure 'search' and 'category' exist before using them
+        if (!empty($filters['search']) || !empty($filters['category'])) {
             $query->filter($filters);
         }
-
-        if (isset($filters['sort'])) {
+        $sortBy = 'name';
+        if (!empty($filters['sort'])) {
             if ($filters['sort'] == 'name') {
                 $sortBy = 'name';
                 $sortDir = 'asc';
-            }
-
-            if ($filters['sort'] == 'lowest') {
+            } elseif ($filters['sort'] == 'lowest') {
                 $sortBy = 'price';
                 $sortDir = 'asc';
-            }
-
-            if ($filters['sort'] == 'highest') {
+            } elseif ($filters['sort'] == 'highest') {
                 $sortBy = 'price';
                 $sortDir = 'desc';
-            }
-
-            if ($filters['sort'] == 'recent') {
+            } elseif ($filters['sort'] == 'recent') {
                 $sortBy = 'created_at';
                 $sortDir = 'asc';
             }
