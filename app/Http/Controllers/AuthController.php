@@ -83,7 +83,8 @@ class AuthController extends Controller
             ]);
         }
 
-        Mail::to($email)->send(new PasswordResetMail($token));
+        // Mail::to($email)->send(new PasswordResetMail($token));
+        Mail::to($email)->queue(mailable: new PasswordResetMail($token));
 
         return redirect()->back()->with('message', 'Password reset link has been sent to your email.');
     }
