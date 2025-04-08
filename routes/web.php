@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProductController;
+use App\Jobs\SendMailToSubscribers;
 use App\Jobs\TestJob;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -66,3 +67,7 @@ Route::get('/product-list', [ProductController::class, 'productlist'])->name('pr
 Route::get('job', function () {
     TestJob::dispatch();
 })->name('job');
+
+Route::get('/subscriber', function () {
+    SendMailToSubscribers::dispatch();
+})->name('suscriber');
