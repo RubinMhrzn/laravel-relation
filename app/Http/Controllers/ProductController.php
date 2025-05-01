@@ -4,21 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Size;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Product::with('categories')->get();
+        $products = Product::withTrashed()->with('variants', 'categories')->get();
         return view('product.index', compact('products'));
     }
 
@@ -27,8 +27,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        return view('product.create', compact('categories'));
+        return view('product.create', [
+            'categories' => Category::all(),
+            'colors' => Color::all(),
+            'sizes' => Size::all(),
+        ]);
     }
 
     /**
@@ -36,19 +39,55 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $product = Product::create([
+        // dd($request->all());
+        $productData = [
             'name' => $request->name,
-            'color' => $request->color,
-            'price' => $request->price
-        ]);
+            'code' => 'PO234ZA',
+            'description' => $request->description ?? null,
+            'specification' => $request->specification ?? null,
+            'features' => $request->features ?? null,
+            'brand' => $request->brand ?? null,
+            'summary' => $request->summary ?? null,
+            'addedable_type' => 'App\Models\Admin',
+            'addedable_id' => 1,
+        ];
 
-        $categoryIds = $request->category_ids;
+        // dd($productData);
 
-        if ($product && $categoryIds) {
-            $product->categories()->sync($categoryIds);
+        $product = Product::create($productData);
+
+        if ($request->filled('category_ids')) {
+            $product->categories()->sync($request->category_ids);
         }
 
-        return redirect()->to('product');
+        if ($request->has('variants')) {
+            foreach ($request->variants as $variant) {
+                $product->variants()->create([
+                    'color_id' => $variant['color_id'] ?? null,
+                    'size_id' => $variant['size_id'] ?? null,
+                    'is_parent' => $variant['is_parent'],
+                    'price' => $variant['price'],
+                    'base_price' => $variant['base_price'],
+                    'stock' => $variant['stock'] ?? 0,
+                    'status' => true,
+                ]);
+            }
+        }
+
+        return redirect()->route('product.index')->with('success', 'Product created successfully');
+    }
+
+    public function restore($slug = null)
+    {
+        $query = Product::query();
+
+        if ($slug) {
+            $query->whereSlug($slug)->restore();
+            return redirect()->back()->with('success', 'Product restored successfully');
+        }
+
+        $query->onlyTrashed()->restore();
+        return redirect()->back()->with('success', 'Product restored successfully');
     }
 
     /**
@@ -65,13 +104,15 @@ class ProductController extends Controller
      */
     public function edit($slug)
     {
-        $product = Product::whereSlug($slug)->first();
+        $product = Product::with('variants')->whereSlug($slug)->firstOrFail();
 
-        $categories = Category::all();
-
-        $selectedCategories = $product->categories->pluck('id')->toArray();
-
-        return view('product.edit', compact('product', 'selectedCategories', 'categories'));
+        return view('product.edit', [
+            'product' => $product,
+            'selectedCategories' => $product->categories->pluck('id')->toArray(),
+            'categories' => Category::all(),
+            'colors' => Color::all(),
+            'sizes' => Size::all(),
+        ]);
     }
 
 
@@ -80,17 +121,38 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $slug)
     {
-        $product = Product::findOrFail($slug);
+        $product = Product::whereSlug($slug)->firstOrFail();
 
         $product->update([
             'name' => $request->name,
-            'color' => $request->color,
-            'price' => $request->price,
+            'description' => $request->description ?? null,
+            'specification' => $request->specification ?? null,
+            'features' => $request->features ?? null,
+            'brand' => $request->brand ?? null,
+            'summary' => $request->summary ?? null,
         ]);
 
-        $product->categories()->sync($request->category_ids);
+        if ($request->filled('category_ids')) {
+            $product->categories()->sync($request->category_ids);
+        }
 
-        return redirect()->to('product');
+        $product->variants()->delete();
+
+        if ($request->has('variants')) {
+            foreach ($request->variants as $variant) {
+                $product->variants()->create([
+                    'color_id' => $variant['color_id'] ?? null,
+                    'size_id' => $variant['size_id'] ?? null,
+                    'is_parent' => $variant['is_parent'] ?? 0,
+                    'price' => $variant['price'],
+                    'base_price' => $variant['base_price'],
+                    'stock' => $variant['stock'] ?? 0,
+                    'status' => true,
+                ]);
+            }
+        }
+
+        return redirect()->route('product.index')->with('success', 'Product updated successfully');
     }
 
     /**

@@ -11,7 +11,7 @@ use App\Jobs\TestJob;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/product', [ProductController::class, 'index'])->name('product');
+Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 
 Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
@@ -19,8 +19,9 @@ Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product
 Route::get('/product/{slug}/edit', [ProductController::class, 'edit'])->name('product.edit');
 
 Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+Route::post('/product-restore/{slug?}', [ProductController::class, 'restore'])->name('product.restore');
 
-Route::match(['put', 'patch'], '/product/{id}', [ProductController::class, 'update'])->name('product.update');
+Route::match(['put', 'patch'], '/product/{slug}', [ProductController::class, 'update'])->name('product.update');
 
 Route::delete('/product/{slug}', [ProductController::class, 'destroy'])->name('product.destroy');
 

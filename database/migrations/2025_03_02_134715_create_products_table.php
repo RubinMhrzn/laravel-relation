@@ -12,11 +12,17 @@ return new class extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string(('name'));
-            $table->string(('slug'));
-            $table->string('color')->nullable();
-            $table->integer('price')->nullable();
+            $table->string('name');
+            $table->string('slug');
+            $table->longText('description')->nullable();
+            $table->string('brand');
+            $table->string('code');
+            $table->json('summary')->nullable();
+            $table->json('specification')->nullable();
+            $table->json('features')->nullable();
+            $table->morphs('addedable');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

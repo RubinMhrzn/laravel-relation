@@ -1,8 +1,15 @@
 @extends('layouts.app')
 @section('content')
-    <div class="mx-48 pt-5"><a href={{ route('product.create') }}
+    <div class="mx-48 pt-5 flex gap-2">
+        <a href={{ route('product.create') }}
             class="bg-gray-600 text-gray-200 mx-2 my-4 px-3 py-2 hover:bg-slate-500 rounded-xl">Add
             product</a>
+        <form class="" action={{ route('product.restore') }} method="post">
+            @csrf
+            @method('post')
+            <button type="submit"
+                class="bg-gray-600 text-gray-200 mx-2 my-4 px-3 py-2 hover:bg-slate-500 rounded-xl">Restore</button>
+        </form>
     </div>
     <div class="relative overflow-x-auto mx-40 my-5">
 
@@ -19,9 +26,6 @@
                         Category
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Price
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         Action
                     </th>
                 </tr>
@@ -34,14 +38,10 @@
                             {{ $product->name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $product->color }}
+                            {{ join(', ', $product->variants->pluck('color.name')->toArray()) }}
                         </td>
                         <td class="px-6 py-4">
-
                             <p>{{ $product->categories->pluck('name')->implode(', ') }}</p>
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $product->price }}
                         </td>
                         <td class="flex flex-row gap-1 justify-start py-3">
                             <a href={{ route('product.edit', $product->slug) }}>edit</a>
@@ -51,6 +51,15 @@
                                 @method('delete')
                                 <button type="submit">Delete</button>
                             </form>
+
+                            @if ($product->deleted_at)
+                                <form class="" action={{ route('product.restore', $product->slug) }} method="post">
+                                    @csrf
+                                    @method('post')
+                                    <button type="submit">Restore</button>
+                                </form>
+                            @endif
+
                         </td>
                     </tr>
                 @endforeach

@@ -28,23 +28,25 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->isMethod('POST')) {
-            return [
-                'name'         => 'required|min:6|string',
-                'color'        => 'required|string',
-                'category_ids' => 'required|array',
-                'price'        => 'required|numeric'
-            ];
-        }
+        // if ($this->isMethod('POST')) {
+        //     return [
+        //         'name'         => 'required|min:6|string',
+        //         'color'        => 'required|string',
+        //         'category_ids' => 'required|array',
+        //         'price'        => 'required|numeric'
+        //     ];
+        // }
 
-        if ($this->isMethod('PUT') || $this->isMethod('PATCh')) {
-            return [
-                'name'         => 'sometimes|required|min:6|string',
-                'color'        => 'sometimes|required|string',
-                'category_ids' => 'sometimes|required|array',
-                'price'        => 'sometimes|required|numeric'
-            ];
-        }
+        // if ($this->isMethod('PUT') || $this->isMethod('PATCh')) {
+        //     return [
+        //         'name'         => 'sometimes|required|min:6|string',
+        //         'color'        => 'sometimes|required|string',
+        //         'category_ids' => 'sometimes|required|array',
+        //         'price'        => 'sometimes|required|numeric'
+        //     ];
+        // }
+
+        return [];
     }
 
     public function messages()

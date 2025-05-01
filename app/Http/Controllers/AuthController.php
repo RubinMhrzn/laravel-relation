@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AuthUserResource;
 use App\Mail\PasswordResetMail;
 use App\Models\PasswordResetToken;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
 
 use App\Models\{
     Writer
@@ -167,4 +169,5 @@ class AuthController extends Controller
         return redirect()->to(route('writer.dashboard'))->with('message', 'Password successfully changed.');
     }
 
+    public function Apilogin(Request $request) {}
 }
