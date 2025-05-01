@@ -28,23 +28,45 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        // if ($this->isMethod('POST')) {
-        //     return [
-        //         'name'         => 'required|min:6|string',
-        //         'color'        => 'required|string',
-        //         'category_ids' => 'required|array',
-        //         'price'        => 'required|numeric'
-        //     ];
-        // }
+        if ($this->isMethod('POST')) {
+            return [
+                'name' => 'required|min:5|string|max:20',
+                'description' => 'nullable|string',
+                'specification' => 'nullable|string',
+                'features' => 'nullable|string',
+                'brand' => 'required|string',
+                'summary' => 'nullable|string',
+                'variants' => 'array|required',
+                'variants.*.price' => 'required|numeric|min:0',
+                'variants.*.color_id' => 'nullable|exists:colors,id',
+                'variants.*.size_id' => 'nullable|exists:sizes,id',
+                'variants.*.is_parent' => 'boolean',
+                'variants.*.base_price' => 'required|numeric|min:0',
+                'variants.*.stock' => 'required|integer|min:0',
+                'variants.*.status' => 'boolean',
+                'files' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096'
+            ];
+        }
 
-        // if ($this->isMethod('PUT') || $this->isMethod('PATCh')) {
-        //     return [
-        //         'name'         => 'sometimes|required|min:6|string',
-        //         'color'        => 'sometimes|required|string',
-        //         'category_ids' => 'sometimes|required|array',
-        //         'price'        => 'sometimes|required|numeric'
-        //     ];
-        // }
+        if ($this->isMethod('PUT') || $this->isMethod('PATCh')) {
+            return [
+                'name' => 'sometimes|required|min:5|string|max:20',
+                'description' => 'sometimes|nullable|string',
+                'specification' => 'sometimes|nullable|string',
+                'features' => 'sometimes|nullable|string',
+                'brand' => 'sometimes|required|string',
+                'summary' => 'sometimes|nullable|string',
+                'variants' => 'sometimes|array|required',
+                'variants.*.price' => 'sometimes|required|numeric|min:0',
+                'variants.*.color_id' => 'sometimes|nullable|exists:colors,id',
+                'variants.*.size_id' => 'sometimes|nullable|exists:sizes,id',
+                'variants.*.is_parent' => 'sometimes|boolean',
+                'variants.*.base_price' => 'sometimes|required|numeric|min:0',
+                'variants.*.stock' => 'sometimes|required|integer|min:0',
+                'variants.*.status' => 'sometimes|boolean',
+                'files' => 'sometimes|nullable|image|mimes:jpg,jpeg,png,webp|max:4096'
+            ];
+        }
 
         return [];
     }

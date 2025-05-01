@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
     <div class="mx-48 pt-5 flex gap-2">
-        <a href={{ route('product.create') }}
+        <a href={{ route('admin.product.create') }}
             class="bg-gray-600 text-gray-200 mx-2 my-4 px-3 py-2 hover:bg-slate-500 rounded-xl">Add
             product</a>
-        <form class="" action={{ route('product.restore') }} method="post">
+        <form class="" action={{ route('admin.product.restore') }} method="post">
             @csrf
             @method('post')
             <button type="submit"
@@ -44,19 +44,23 @@
                             <p>{{ $product->categories->pluck('name')->implode(', ') }}</p>
                         </td>
                         <td class="flex flex-row gap-1 justify-start py-3">
-                            <a href={{ route('product.edit', $product->slug) }}>edit</a>
+                            <a href={{ route('admin.product.edit', $product->slug) }}>edit</a>
                             <a href="/product/{{ $product->slug }}">show</a>
                             <div>|</div>
-                            <form class="" action="/product/{{ $product->slug }}" method="post">@csrf
-                                @method('delete')
-                                <button type="submit">Delete</button>
-                            </form>
 
                             @if ($product->deleted_at)
-                                <form class="" action={{ route('product.restore', $product->slug) }} method="post">
+                                <form class="" action={{ route('admin.product.restore', $product->slug) }}
+                                    method="post">
                                     @csrf
                                     @method('post')
                                     <button type="submit">Restore</button>
+                                </form>
+                            @else
+                                <form class="" action={{ route('admin.product.destroy', $product->slug) }}
+                                    method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit">Delete</button>
                                 </form>
                             @endif
 

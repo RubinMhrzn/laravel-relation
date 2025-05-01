@@ -49,4 +49,13 @@ class Product extends Model
                 });
             });
     }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($product) {
+            // Generate code
+            $product->code = generateProductCode($product);
+        });
+    }
 }

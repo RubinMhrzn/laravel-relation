@@ -2,7 +2,7 @@
 @section('content')
     <div class="-mx-36 my-5">
 
-        <form class="max-w-sm mx-auto" action={{ route('product.store') }} method="post">
+        <form class="max-w-sm mx-auto" action={{ route('admin.product.store') }} method="post">
             @csrf
             <div class="mb-5">
                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>

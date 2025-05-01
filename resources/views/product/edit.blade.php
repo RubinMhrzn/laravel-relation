@@ -2,7 +2,7 @@
 @section('content')
     <div class="-mx-36 my-5">
 
-        <form class="max-w-sm mx-auto" action={{ route('product.update', $product->slug) }} method="post">
+        <form class="max-w-sm mx-auto" action={{ route('admin.product.update', $product->slug) }} method="post">
             @csrf
             @method('put')
             <div class="mb-5">

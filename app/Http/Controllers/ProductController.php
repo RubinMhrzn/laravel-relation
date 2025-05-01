@@ -42,7 +42,6 @@ class ProductController extends Controller
         // dd($request->all());
         $productData = [
             'name' => $request->name,
-            'code' => 'PO234ZA',
             'description' => $request->description ?? null,
             'specification' => $request->specification ?? null,
             'features' => $request->features ?? null,
@@ -74,20 +73,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('product.index')->with('success', 'Product created successfully');
-    }
-
-    public function restore($slug = null)
-    {
-        $query = Product::query();
-
-        if ($slug) {
-            $query->whereSlug($slug)->restore();
-            return redirect()->back()->with('success', 'Product restored successfully');
-        }
-
-        $query->onlyTrashed()->restore();
-        return redirect()->back()->with('success', 'Product restored successfully');
+        return redirect()->route('admin.product.index')->with('success', 'Product created successfully');
     }
 
     /**
@@ -152,7 +138,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('product.index')->with('success', 'Product updated successfully');
+        return redirect()->route('admin.product.index')->with('success', 'Product updated successfully');
     }
 
     /**
@@ -162,12 +148,26 @@ class ProductController extends Controller
     {
         $product = Product::whereSlug($slug)->first();
 
-        $product->categories()->detach();
+        // $product->categories()->detach();
 
         $product->delete();
 
-        return redirect()->to('product');
+        return redirect()->back()->with('success', 'Product deleted successfully');
     }
+
+    public function restore($slug = null)
+    {
+        $query = Product::query();
+
+        if ($slug) {
+            $query->whereSlug($slug)->restore();
+            return redirect()->back()->with('success', 'Product restored successfully');
+        }
+
+        $query->onlyTrashed()->restore();
+        return redirect()->back()->with('success', 'Product restored successfully');
+    }
+
     public function productlist(Request $request)
     {
         $filters = $request->filters ?? [];
