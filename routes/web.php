@@ -57,7 +57,6 @@ Route::post('/send-password', [AuthController::class, 'sendPasswordResetToken'])
 Route::get('/set-password', [AuthController::class, 'setPassword'])->name('set-password');
 Route::post('/set-password', [AuthController::class, 'resetPassword']);
 
-
 //change password
 Route::get('/changepassword', [AuthController::class, 'changePassword'])->middleware('auth:writer')->name('changepassword');
 Route::post('/replacepassword', [AuthController::class, 'replacepassword'])->middleware('auth:writer')->name('replacepassword');
@@ -65,6 +64,7 @@ Route::post('/replacepassword', [AuthController::class, 'replacepassword'])->mid
 // Route::get('/displayproduct', [ProductController::class, 'displayproduct'])->name('displayproduct');
 
 Route::get('/product-list', [ProductController::class, 'productlist'])->name('productlist');
+Route::post('/product-list', [ProductController::class, 'productlist'])->name('products.filter');
 
 Route::get('job', function () {
     TestJob::dispatch();

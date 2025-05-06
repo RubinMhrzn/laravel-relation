@@ -10,7 +10,10 @@
 </head>
 
 <body>
-    <form action="{{ route('productlist') }}">
+    <form action="{{ route('products.filter') }}" method='post'>
+        @method('post')
+        @csrf
+
         <div class="flex flex-col gap-5">
             <!-- Badge Selection -->
 

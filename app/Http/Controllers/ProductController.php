@@ -10,6 +10,7 @@ use App\Models\Size;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -175,32 +176,36 @@ class ProductController extends Controller
         $sortDir = $filters['sort_dir'] ?? 'asc';
         $categories = Category::whereHas('products')->get();
 
-        $query = Product::with('categories');
+        $query = Product::with('categories', 'variants');
 
         // Ensure 'search' and 'category' exist before using them
-        if (!empty($filters['search']) || !empty($filters['category'])) {
+        if (!empty($filters['search']) || !empty($filters['category']) || !empty($filters['sort'])) {
             $query->filter($filters);
         }
-        $sortBy = 'name';
+
+        $sortBy = 'products.created_at';
+        $sortDir = 'desc';
+
         if (!empty($filters['sort'])) {
             if ($filters['sort'] == 'name') {
-                $sortBy = 'name';
+                $sortBy = 'products.name';
                 $sortDir = 'asc';
-            } elseif ($filters['sort'] == 'lowest') {
-                $sortBy = 'price';
-                $sortDir = 'asc';
-            } elseif ($filters['sort'] == 'highest') {
-                $sortBy = 'price';
-                $sortDir = 'desc';
-            } elseif ($filters['sort'] == 'recent') {
-                $sortBy = 'created_at';
+            } elseif ($filters['sort'] == 'lowest' || $filters['sort'] == 'highest') {
+                // Join the product_variants table with alias pv
+                $query->leftJoin('product_variants as pv', 'pv.product_id', '=', 'products.id')
+                    ->select('products.*')
+                    ->groupBy('products.id');
+
+                $sortBy = DB::raw('MAX(pv.price)');
+
+                $sortDir = $filters['sort'] === 'lowest' ? 'asc' : 'desc';
+            } elseif ($filters['sort'] === 'recent') {
+                $sortBy = 'products.created_at';
                 $sortDir = 'asc';
             }
-
-            $query->orderBy($sortBy, $sortDir);
         }
 
-        $products = $query->paginate(10);
+        $products = $query->orderBy($sortBy, $sortDir)->paginate(10);
 
         return view('product.filterproduct', compact('products', 'categories'));
     }
